@@ -1,124 +1,334 @@
-import React, { useState } from 'react';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
 
-function App() {
-  // State variables for banner customization
-  const [bgColor, setBgColor] = useState('#0078d7');
-  const [bannerText, setBannerText] = useState('I love coding!');
-  const [imageUrl, setImageUrl] = useState('');
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
+const App = () => {
+  const [bannerText, setBannerText] = useState("Your <b>Banner</b> Text");
+  const [bannerColor1, setBannerColor1] = useState("#3498db");
+  const [bannerColor2, setBannerColor2] = useState("#2ecc71");
+  const [bannerHeight, setBannerHeight] = useState(100);
+  const [textSize, setTextSize] = useState(24);
+  const [textFont, setTextFont] = useState("Arial");
+  const [textColor, setTextColor] = useState("#ffffff");
+  const [imageUrls, setImageUrls] = useState([]);
+  const [textPosition, setTextPosition] = useState({ x: 50, y: 50 });
+  const [draggingText, setDraggingText] = useState(false);
+  const [offsetText, setOffsetText] = useState({ x: 0, y: 0 });
 
-  // Predefined templates for banner design
-  const templates = [
-    {
-      id: 1,
-      name: "Classic",
-      defaultBgColor: "#0078d7",
-      defaultBannerText: "I love coding!",
-      defaultImageUrl: "",
-      cssClass: "template-classic"
-    },
-    {
-      id: 2,
-      name: "Modern",
-      defaultBgColor: "#333",
-      defaultBannerText: "Modern Banner",
-      defaultImageUrl: "https://via.placeholder.com/400x100?text=Modern",
-      cssClass: "template-modern"
-    },
-    {
-      id: 3,
-      name: "Elegant",
-      defaultBgColor: "#f5f5f5",
-      defaultBannerText: "Elegant Design",
-      defaultImageUrl: "https://via.placeholder.com/400x100?text=Elegant",
-      cssClass: "template-elegant"
-    },
-  ];
-
-  // Handlers for form input changes
-  const handleColorChange = (e) => setBgColor(e.target.value);
-  const handleTextChange = (e) => setBannerText(e.target.value);
-  const handleImageUrlChange = (e) => {
-    console.log("Image URL:", e.target.value);
-    setImageUrl(e.target.value);
+  const handleTextMouseDown = (e) => {
+    setDraggingText(true);
+    setOffsetText({
+      x: e.clientX - textPosition.x,
+      y: e.clientY - textPosition.y,
+    });
   };
 
-  // Function to select a template and update state
-  const selectTemplate = (template) => {
-    setBgColor(template.defaultBgColor);
-    setBannerText(template.defaultBannerText);
-    setImageUrl(template.defaultImageUrl);
-    setSelectedTemplate(template);
+  const handleMouseMove = (e) => {
+    if (draggingText) {
+      setTextPosition({
+        x: e.clientX - offsetText.x,
+        y: e.clientY - offsetText.y,
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setDraggingText(false);
+  };
+
+  const addImage = () => {
+    setImageUrls([...imageUrls, { url: "", x: 50, y: 50, size: 100 }]);
+  };
+
+  const updateImageUrl = (index, url) => {
+    const updatedImages = [...imageUrls];
+    updatedImages[index].url = url;
+    setImageUrls(updatedImages);
+  };
+
+  const updateImagePosition = (index, x, y) => {
+    const updatedImages = [...imageUrls];
+    updatedImages[index].x = x;
+    updatedImages[index].y = y;
+    setImageUrls(updatedImages);
+  };
+
+  const updateImageSize = (index, size) => {
+    const updatedImages = [...imageUrls];
+    updatedImages[index].size = size;
+    setImageUrls(updatedImages);
+  };
+
+  // Generates the full source code as a string, including current state values.
+  // This function interpolates state values into the code template.
+  const generateCodeString = () => {
+    // Escape double quotes in bannerText so that they are valid in the code string.
+    const escapedBannerText = bannerText.replace(/"/g, '\\"');
+    return `import React, { useState } from "react";
+import "./App.css";
+
+const App = () => {
+  const [bannerText, setBannerText] = useState("${escapedBannerText}");
+  const [bannerColor1, setBannerColor1] = useState("${bannerColor1}");
+  const [bannerColor2, setBannerColor2] = useState("${bannerColor2}");
+  const [bannerHeight, setBannerHeight] = useState(${bannerHeight});
+  const [textSize, setTextSize] = useState(${textSize});
+  const [textFont, setTextFont] = useState("${textFont}");
+  const [textColor, setTextColor] = useState("${textColor}");
+  const [imageUrls, setImageUrls] = useState(${JSON.stringify(imageUrls)});
+  const [textPosition, setTextPosition] = useState(${JSON.stringify(textPosition)});
+  const [draggingText, setDraggingText] = useState(false);
+  const [offsetText, setOffsetText] = useState({ x: 0, y: 0 });
+
+  const handleTextMouseDown = (e) => {
+    setDraggingText(true);
+    setOffsetText({
+      x: e.clientX - textPosition.x,
+      y: e.clientY - textPosition.y,
+    });
+  };
+
+  const handleMouseMove = (e) => {
+    if (draggingText) {
+      setTextPosition({
+        x: e.clientX - offsetText.x,
+        y: e.clientY - offsetText.y,
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setDraggingText(false);
+  };
+
+  const addImage = () => {
+    setImageUrls([...imageUrls, { url: "", x: 50, y: 50, size: 100 }]);
+  };
+
+  const updateImageUrl = (index, url) => {
+    const updatedImages = [...imageUrls];
+    updatedImages[index].url = url;
+    setImageUrls(updatedImages);
+  };
+
+  const updateImagePosition = (index, x, y) => {
+    const updatedImages = [...imageUrls];
+    updatedImages[index].x = x;
+    updatedImages[index].y = y;
+    setImageUrls(updatedImages);
+  };
+
+  const updateImageSize = (index, size) => {
+    const updatedImages = [...imageUrls];
+    updatedImages[index].size = size;
+    setImageUrls(updatedImages);
   };
 
   return (
-    <div className="App">
-      {/* Full-width banner */}
-      <header className="banner" style={{ backgroundColor: bgColor }}>
-        <h1 data-testid="banner-text">{bannerText}</h1>
-        {imageUrl && <img src={imageUrl} alt="Banner Visual" className="banner-image" />}
-      </header>
-
-      {/* Form for live customization */}
-      <section className="controls">
-        <form>
-          <div>
-            <label htmlFor="bgColor">Banner Background Color:</label>
-            <input 
-              type="color" 
-              id="bgColor" 
-              value={bgColor} 
-              onChange={handleColorChange} 
-            />
-          </div>
-          <div>
-            <label htmlFor="bannerTextInput">Banner Text:</label>
-            <input 
-              type="text" 
-              id="bannerTextInput" 
-              value={bannerText} 
-              onChange={handleTextChange} 
-              placeholder="Enter new banner text" 
-            />
-          </div>
-          <div>
-            <label htmlFor="imageUrlInput">Banner Image URL:</label>
-            <input 
-              type="text" 
-              id="imageUrlInput" 
-              value={imageUrl} 
-              onChange={handleImageUrlChange} 
-              placeholder="Enter image URL (optional)" 
-            />
-          </div>
-        </form>
-      </section>
-
-      {/* Template Preview Gallery */}
-      <section className="template-gallery">
-        <h2>Select a Template</h2>
-        <div className="gallery-grid">
-          {templates.map((template) => (
-            <div 
-              key={template.id} 
-              className="template-preview" 
-              onClick={() => selectTemplate(template)}
-            >
-              <p>{template.name}</p>
-              <div 
-                className="preview-banner" 
-                style={{ backgroundColor: template.defaultBgColor }}
-              >
-                <p>{template.defaultBannerText}</p>
-                {template.defaultImageUrl && <img src={template.defaultImageUrl} alt={template.name} />}
-              </div>
-            </div>
-          ))}
+    <div className="App" onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
+      <div
+        className="banner"
+        style={{
+          background: \`linear-gradient(to right, \${bannerColor1}, \${bannerColor2})\`,
+          height: \`\${bannerHeight}px\`,
+          position: "relative",
+        }}
+      >
+        <div
+          className="banner-text"
+          style={{
+            fontSize: \`\${textSize}px\`,
+            fontFamily: textFont,
+            color: textColor,
+            position: "absolute",
+            left: \`\${textPosition.x}px\`,
+            top: \`\${textPosition.y}px\`,
+            cursor: "grab",
+          }}
+          onMouseDown={handleTextMouseDown}
+        >
+          {bannerText}
         </div>
-      </section>
+        {imageUrls.map((image, index) =>
+          image.url && (
+            <img
+              key={index}
+              src={image.url}
+              alt="Banner"
+              className="banner-image"
+              style={{
+                width: \`\${image.size}px\`,
+                height: "auto",
+                position: "absolute",
+                left: \`\${image.x}px\`,
+                top: \`\${image.y}px\`,
+                cursor: "grab",
+              }}
+              onMouseDown={(e) => {
+                const offsetX = e.clientX - image.x;
+                const offsetY = e.clientY - image.y;
+                const moveImage = (event) =>
+                  updateImagePosition(index, event.clientX - offsetX, event.clientY - offsetY);
+                const stopMoving = () => document.removeEventListener("mousemove", moveImage);
+                document.addEventListener("mousemove", moveImage);
+                document.addEventListener("mouseup", stopMoving, { once: true });
+              }}
+            />
+          )
+        )}
+      </div>
+
+      <div className="controls">
+        <label>Banner Text (Plain Text Only):</label>
+        <textarea value={bannerText} onChange={(e) => setBannerText(e.target.value)} />
+
+        <label>Font Size:</label>
+        <input type="range" min="10" max="100" value={textSize} onChange={(e) => setTextSize(e.target.value)} />
+
+        <label>Font Family:</label>
+        <select value={textFont} onChange={(e) => setTextFont(e.target.value)}>
+          <option value="Arial">Arial</option>
+          <option value="Verdana">Verdana</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Georgia">Georgia</option>
+        </select>
+
+        <label>Font Color:</label>
+        <input type="color" value={textColor} onChange={(e) => setTextColor(e.target.value)} />
+
+        <label>Gradient Color 1:</label>
+        <input type="color" value={bannerColor1} onChange={(e) => setBannerColor1(e.target.value)} />
+
+        <label>Gradient Color 2:</label>
+        <input type="color" value={bannerColor2} onChange={(e) => setBannerColor2(e.target.value)} />
+
+        <label>Banner Height:</label>
+        <input type="range" min="50" max="300" value={bannerHeight} onChange={(e) => setBannerHeight(e.target.value)} />
+
+        <button onClick={addImage}>Add Image</button>
+        {imageUrls.map((image, index) => (
+          <div key={index}>
+            <label>Image URL {index + 1}:</label>
+            <input type="text" value={image.url} onChange={(e) => updateImageUrl(index, e.target.value)} />
+            <label>Image Size:</label>
+            <input type="range" min="50" max="300" value={image.size} onChange={(e) => updateImageSize(index, e.target.value)} />
+          </div>
+        ))}
+      </div>
     </div>
   );
-}
+};
+
+export default App;
+`;
+  };
+
+  const downloadCode = () => {
+    const codeStr = generateCodeString();
+    const blob = new Blob([codeStr], { type: "text/plain;charset=utf-8" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "App.js";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="App" onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
+      <div
+        className="banner"
+        style={{
+          background: `linear-gradient(to right, ${bannerColor1}, ${bannerColor2})`,
+          height: `${bannerHeight}px`,
+          position: "relative",
+        }}
+      >
+        <div
+          className="banner-text"
+          style={{
+            fontSize: `${textSize}px`,
+            fontFamily: textFont,
+            color: textColor,
+            position: "absolute",
+            left: `${textPosition.x}px`,
+            top: `${textPosition.y}px`,
+            cursor: "grab",
+          }}
+          onMouseDown={handleTextMouseDown}
+        >
+          {bannerText}
+        </div>
+        {imageUrls.map((image, index) =>
+          image.url && (
+            <img
+              key={index}
+              src={image.url}
+              alt="Banner"
+              className="banner-image"
+              style={{
+                width: `${image.size}px`,
+                height: "auto",
+                position: "absolute",
+                left: `${image.x}px`,
+                top: `${image.y}px`,
+                cursor: "grab",
+              }}
+              onMouseDown={(e) => {
+                const offsetX = e.clientX - image.x;
+                const offsetY = e.clientY - image.y;
+                const moveImage = (event) =>
+                  updateImagePosition(index, event.clientX - offsetX, event.clientY - offsetY);
+                const stopMoving = () => document.removeEventListener("mousemove", moveImage);
+                document.addEventListener("mousemove", moveImage);
+                document.addEventListener("mouseup", stopMoving, { once: true });
+              }}
+            />
+          )
+        )}
+      </div>
+
+      <div className="controls">
+        <label>Banner Text (Plain Text Only):</label>
+        <textarea value={bannerText} onChange={(e) => setBannerText(e.target.value)} />
+
+        <label>Font Size:</label>
+        <input type="range" min="10" max="100" value={textSize} onChange={(e) => setTextSize(e.target.value)} />
+
+        <label>Font Family:</label>
+        <select value={textFont} onChange={(e) => setTextFont(e.target.value)}>
+          <option value="Arial">Arial</option>
+          <option value="Verdana">Verdana</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Georgia">Georgia</option>
+        </select>
+
+        <label>Font Color:</label>
+        <input type="color" value={textColor} onChange={(e) => setTextColor(e.target.value)} />
+
+        <label>Gradient Color 1:</label>
+        <input type="color" value={bannerColor1} onChange={(e) => setBannerColor1(e.target.value)} />
+
+        <label>Gradient Color 2:</label>
+        <input type="color" value={bannerColor2} onChange={(e) => setBannerColor2(e.target.value)} />
+
+        <label>Banner Height:</label>
+        <input type="range" min="50" max="300" value={bannerHeight} onChange={(e) => setBannerHeight(e.target.value)} />
+
+        <button onClick={addImage}>Add Image</button>
+        {imageUrls.map((image, index) => (
+          <div key={index}>
+            <label>Image URL {index + 1}:</label>
+            <input type="text" value={image.url} onChange={(e) => updateImageUrl(index, e.target.value)} />
+            <label>Image Size:</label>
+            <input type="range" min="50" max="300" value={image.size} onChange={(e) => updateImageSize(index, e.target.value)} />
+          </div>
+        ))}
+      </div>
+      <button onClick={downloadCode}>Download Code</button>
+    </div>
+  );
+};
 
 export default App;
