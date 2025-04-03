@@ -1,66 +1,75 @@
-/* Basic styling for the app */
 .App {
   text-align: center;
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  background-color: #f4f4f4;
+  min-height: 100vh;
 }
 
-/* Banner styling */
 .banner {
-  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+  margin: 20px auto;
 }
 
-/* Text styling */
 .banner-text {
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  padding: 10px;
 }
 
-/* Image styling */
 .banner-image {
   border: 2px solid white;
 }
 
-/* Controls section */
 .controls {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-  padding: 20px;
-  background-color: #f4f4f4;
-  border-top: 2px solid #ccc;
+  width: 90%;
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: #ffffff;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .controls label {
   font-weight: bold;
   display: block;
-  margin-bottom: 5px;
+  margin: 10px 0 5px;
 }
 
 .controls input,
 .controls select,
 .controls textarea {
   width: 100%;
-  padding: 5px;
+  padding: 8px;
   margin-bottom: 10px;
+  box-sizing: border-box;
 }
 
 .controls button {
-  padding: 10px;
+  padding: 10px 20px;
   background-color: #007bff;
-  color: white;
+  color: #ffffff;
   border: none;
   cursor: pointer;
+  margin-top: 10px;
 }
 
 .controls button:hover {
   background-color: #0056b3;
+}
+
+.image-control {
+  margin-bottom: 15px;
+}
+
+/* Resize handle styling */
+.resize-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  cursor: se-resize;
 }
